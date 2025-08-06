@@ -1,141 +1,106 @@
+
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Calculadora de Leilão de Carros</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-    }
-    .container {
-      background: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-      max-width: 800px;
-      width: 100%;
-    }
-    h2 {
-      text-align: center;
-      color: #333;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 16px;
-    }
-    .results {
-      margin-top: 30px;
-      background: #eef;
-      padding: 20px;
-      border-radius: 10px;
-    }
-    .result-item {
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Leilão</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            padding: 40px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        input, label {
+            display: block;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        input[type="number"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .results {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Calculadora de Leilão de Carros</h2>
+    <div class="container">
+        <h2>Calculadora de Leilão de Veículos</h2>
+        <label>Valor da FIPE (R$): <input id="fipe" type="number" /></label>
+        <label>Preço de Venda (R$): <input id="precoVenda" type="number" /></label>
+        <label>Lance Dado (R$): <input id="lance" type="number" /></label>
+        <label>% Comissão Leiloeiro: <input id="comissaoLeiloeiro" type="number" /></label>
+        <label>Transferência (R$): <input id="transferencia" type="number" /></label>
+        <label>Frete (R$): <input id="frete" type="number" /></label>
+        <label>Lavagem (R$): <input id="lavagem" type="number" /></label>
+        <label>Manutenção (R$): <input id="manutencao" type="number" /></label>
+        <label>% Comissão Vendedor: <input id="comissaoVendedor" type="number" /></label>
+        <button onclick="calcular()">Calcular</button>
 
-    <label>Valor da Tabela FIPE</label>
-    <input type="text" id="fipe" placeholder="Ex: 30000">
+        <div class="results" id="resultados"></div>
+    </div>
 
-    <label>Valor do Lance</label>
-    <input type="text" id="lance" placeholder="Ex: 20000">
+    <script>
+        function formatarMoeda(valor) {
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
 
-    <label>Comissão do Leiloeiro (%)</label>
-    <input type="text" id="comissao" placeholder="Ex: 5">
+        function calcular() {
+            const fipe = parseFloat(document.getElementById("fipe").value) || 0;
+            const precoVenda = parseFloat(document.getElementById("precoVenda").value) || 0;
+            const lance = parseFloat(document.getElementById("lance").value) || 0;
+            const comissaoLeiloeiro = parseFloat(document.getElementById("comissaoLeiloeiro").value) || 0;
+            const transferencia = parseFloat(document.getElementById("transferencia").value) || 0;
+            const frete = parseFloat(document.getElementById("frete").value) || 0;
+            const lavagem = parseFloat(document.getElementById("lavagem").value) || 0;
+            const manutencao = parseFloat(document.getElementById("manutencao").value) || 0;
+            const comissaoVendedor = parseFloat(document.getElementById("comissaoVendedor").value) || 0;
 
-    <label>Transferência (R$)</label>
-    <input type="text" id="transferencia" placeholder="Ex: 1500">
+            const totalLance = lance + (lance * comissaoLeiloeiro / 100);
+            const comissaoVend = precoVenda * comissaoVendedor / 100;
+            const totalCustos = totalLance + transferencia + frete + lavagem + manutencao + comissaoVend;
+            const lucroReais = precoVenda - totalCustos;
+            const lucroPercentual = (lucroReais / precoVenda) * 100;
 
-    <label>Frete (R$)</label>
-    <input type="text" id="frete" placeholder="Ex: 800">
+            const fipe90 = fipe * 0.9;
+            const fipe50 = fipe * 0.5;
 
-    <label>Lavagem (R$)</label>
-    <input type="text" id="lavagem" placeholder="Ex: 100">
-
-    <label>Manutenção (R$)</label>
-    <input type="text" id="manutencao" placeholder="Ex: 1200">
-
-    <label>Comissão do Vendedor (%)</label>
-    <input type="text" id="comissao_vendedor" placeholder="Ex: 10">
-
-    <div class="results" id="resultados"></div>
-  </div>
-
-  <script>
-    const inputs = document.querySelectorAll('input');
-
-    function formatarValor(valor) {
-      return parseFloat(valor).toLocaleString('pt-BR', {
-        style: 'currency', currency: 'BRL'
-      });
-    }
-
-    function limparValor(str) {
-      return parseFloat(str.replace(/\./g, '').replace(',', '.')) || 0;
-    }
-
-    function calcular() {
-      const fipe = limparValor(document.getElementById('fipe').value);
-      const lance = limparValor(document.getElementById('lance').value);
-      const comissao = limparValor(document.getElementById('comissao').value);
-      const transferencia = limparValor(document.getElementById('transferencia').value);
-      const frete = limparValor(document.getElementById('frete').value);
-      const lavagem = limparValor(document.getElementById('lavagem').value);
-      const manutencao = limparValor(document.getElementById('manutencao').value);
-      const comissao_vendedor = limparValor(document.getElementById('comissao_vendedor').value);
-
-      if (!fipe) return;
-
-      const fipe50 = fipe * 0.50;
-      const fipe70 = fipe * 0.70;
-      const fipe80 = fipe * 0.80;
-      const fipe90 = fipe * 0.90;
-
-      const totalLance = lance + (lance * (comissao / 100));
-      const precoVenda = fipe80;
-      const comissaoVendR$ = precoVenda * (comissao_vendedor / 100);
-      const totalCustos = totalLance + transferencia + frete + lavagem + manutencao + comissaoVendR$;
-
-      const lucro = precoVenda - totalCustos;
-      const lucroPercent = (lucro / precoVenda) * 100;
-
-      const resultados = document.getElementById('resultados');
-      resultados.innerHTML = `
-        <div class="result-item">50% da FIPE: ${formatarValor(fipe50)}</div>
-        <div class="result-item">70% da FIPE: ${formatarValor(fipe70)}</div>
-        <div class="result-item">80% da FIPE: ${formatarValor(fipe80)}</div>
-        <div class="result-item">90% da FIPE: ${formatarValor(fipe90)}</div>
-        <hr>
-        <div class="result-item">Total do lance com comissão: ${formatarValor(totalLance)}</div>
-        <div class="result-item">Comissão do vendedor (R$): ${formatarValor(comissaoVendR$)}</div>
-        <div class="result-item">Total de custos: ${formatarValor(totalCustos)}</div>
-        <div class="result-item">Lucro líquido (R$): ${formatarValor(lucro)}</div>
-        <div class="result-item">Lucro líquido (%): ${lucroPercent.toFixed(2).replace('.', ',')}%</div>
-      `;
-    }
-
-    inputs.forEach(input => {
-      input.addEventListener('input', calcular);
-    });
-  </script>
+            document.getElementById("resultados").innerHTML = `
+                <strong>90% da FIPE:</strong> ${formatarMoeda(fipe90)}<br>
+                <strong>50% da FIPE:</strong> ${formatarMoeda(fipe50)}<br><br>
+                <strong>Total do Lance:</strong> ${formatarMoeda(totalLance)}<br>
+                <strong>Total de Custos:</strong> ${formatarMoeda(totalCustos)}<br>
+                <strong>Lucro Líquido (R$):</strong> ${formatarMoeda(lucroReais)}<br>
+                <strong>Lucro Líquido (%):</strong> ${lucroPercentual.toFixed(2).replace(".", ",")}%<br>
+            `;
+        }
+    </script>
 </body>
 </html>
