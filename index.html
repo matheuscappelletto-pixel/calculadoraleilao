@@ -1,539 +1,141 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Leilão de Carros</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f9fafb;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .header-icon {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            color: white;
-            font-size: 24px;
-        }
-
-        h1 {
-            color: #111827;
-            font-size: 1.875rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .subtitle {
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            margin-bottom: 1.5rem;
-        }
-
-        .input-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            color: #374151;
-            font-size: 0.875rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-        }
-
-        .input-wrapper {
-            position: relative;
-        }
-
-        input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.2s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #3b82f6;
-        }
-
-        .currency-input {
-            padding-left: 2.5rem;
-        }
-
-        .percent-input {
-            padding-right: 2.5rem;
-        }
-
-        .input-prefix {
-            position: absolute;
-            left: 0.75rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-
-        .input-suffix {
-            position: absolute;
-            right: 0.75rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-
-        .calculate-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white;
-            border: none;
-            padding: 1rem;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 1rem;
-        }
-
-        .calculate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
-        }
-
-        .results {
-            margin-top: 1.5rem;
-        }
-
-        .results h2 {
-            color: #111827;
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .fipe-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .fipe-card {
-            background: #eff6ff;
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .fipe-label {
-            font-size: 0.75rem;
-            color: #1d4ed8;
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-        }
-
-        .fipe-value {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: #1d4ed8;
-        }
-
-        .cost-summary {
-            background: #f9fafb;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-        }
-
-        .cost-summary h3 {
-            color: #374151;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-
-        .cost-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            font-size: 0.875rem;
-        }
-
-        .cost-label {
-            color: #6b7280;
-        }
-
-        .cost-value {
-            font-weight: 500;
-        }
-
-        .cost-total {
-            border-top: 1px solid #d1d5db;
-            padding-top: 0.5rem;
-            margin-top: 0.5rem;
-            font-weight: 600;
-            color: #dc2626;
-        }
-
-        .profit-display {
-            background: linear-gradient(135deg, #059669, #047857);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .profit-title {
-            font-size: 1.125rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .profit-amount {
-            font-size: 1.875rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .profit-percentage {
-            font-size: 0.875rem;
-            opacity: 0.9;
-        }
-
-        .error {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #dc2626;
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 500;
-        }
-
-        .hidden {
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Calculadora de Leilão de Carros</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      max-width: 800px;
+      width: 100%;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .results {
+      margin-top: 30px;
+      background: #eef;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .result-item {
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-icon">🧮</div>
-            <h1>Calculadora de Leilão</h1>
-            <p class="subtitle">Calcule o lucro do seu leilão de carros</p>
-        </div>
+  <div class="container">
+    <h2>Calculadora de Leilão de Carros</h2>
 
-        <!-- Calculator Form -->
-        <div class="card">
-            <form id="calculatorForm">
-                <div class="input-group">
-                    <label for="fipeValue">🚗 Valor FIPE</label>
-                    <div class="input-wrapper">
-                        <span class="input-prefix">R$</span>
-                        <input type="text" id="fipeValue" class="currency-input" placeholder="0,00">
-                    </div>
-                </div>
+    <label>Valor da Tabela FIPE</label>
+    <input type="text" id="fipe" placeholder="Ex: 30000">
 
-                <div class="input-group">
-                    <label for="bidAmount">🔨 Valor do Lance</label>
-                    <div class="input-wrapper">
-                        <span class="input-prefix">R$</span>
-                        <input type="text" id="bidAmount" class="currency-input" placeholder="0,00">
-                    </div>
-                </div>
+    <label>Valor do Lance</label>
+    <input type="text" id="lance" placeholder="Ex: 20000">
 
-                <div class="input-group">
-                    <label for="auctioneerCommission">% Comissão do Leiloeiro</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="auctioneerCommission" class="percent-input" placeholder="0,00">
-                        <span class="input-suffix">%</span>
-                    </div>
-                </div>
+    <label>Comissão do Leiloeiro (%)</label>
+    <input type="text" id="comissao" placeholder="Ex: 5">
 
-                <div class="input-group">
-                    <label for="transferFee">📋 Taxa de Transferência</label>
-                    <div class="input-wrapper">
-                        <span class="input-prefix">R$</span>
-                        <input type="text" id="transferFee" class="currency-input" placeholder="0,00">
-                    </div>
-                </div>
+    <label>Transferência (R$)</label>
+    <input type="text" id="transferencia" placeholder="Ex: 1500">
 
-                <div class="input-group">
-                    <label for="freight">🚚 Frete</label>
-                    <div class="input-wrapper">
-                        <span class="input-prefix">R$</span>
-                        <input type="text" id="freight" class="currency-input" placeholder="0,00">
-                    </div>
-                </div>
+    <label>Frete (R$)</label>
+    <input type="text" id="frete" placeholder="Ex: 800">
 
-                <div class="input-group">
-                    <label for="washing">💧 Lavagem</label>
-                    <div class="input-wrapper">
-                        <span class="input-prefix">R$</span>
-                        <input type="text" id="washing" class="currency-input" placeholder="0,00">
-                    </div>
-                </div>
+    <label>Lavagem (R$)</label>
+    <input type="text" id="lavagem" placeholder="Ex: 100">
 
-                <div class="input-group">
-                    <label for="maintenance">🔧 Manutenção</label>
-                    <div class="input-wrapper">
-                        <span class="input-prefix">R$</span>
-                        <input type="text" id="maintenance" class="currency-input" placeholder="0,00">
-                    </div>
-                </div>
+    <label>Manutenção (R$)</label>
+    <input type="text" id="manutencao" placeholder="Ex: 1200">
 
-                <div class="input-group">
-                    <label for="sellerCommission">🤝 Comissão do Vendedor</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="sellerCommission" class="percent-input" placeholder="0,00">
-                        <span class="input-suffix">%</span>
-                    </div>
-                </div>
+    <label>Comissão do Vendedor (%)</label>
+    <input type="text" id="comissao_vendedor" placeholder="Ex: 10">
 
-                <button type="submit" class="calculate-btn">🧮 Calcular Lucro</button>
-            </form>
-        </div>
+    <div class="results" id="resultados"></div>
+  </div>
 
-        <!-- Results -->
-        <div id="results" class="card hidden">
-            <h2>📊 Resultados do Cálculo</h2>
+  <script>
+    const inputs = document.querySelectorAll('input');
 
-            <!-- FIPE Percentages -->
-            <div class="fipe-grid">
-                <div class="fipe-card">
-                    <div class="fipe-label">50% FIPE</div>
-                    <div class="fipe-value" id="fipe50">R$ 0,00</div>
-                </div>
-                <div class="fipe-card">
-                    <div class="fipe-label">70% FIPE</div>
-                    <div class="fipe-value" id="fipe70">R$ 0,00</div>
-                </div>
-                <div class="fipe-card">
-                    <div class="fipe-label">80% FIPE</div>
-                    <div class="fipe-value" id="fipe80">R$ 0,00</div>
-                </div>
-                <div class="fipe-card">
-                    <div class="fipe-label">90% FIPE</div>
-                    <div class="fipe-value" id="fipe90">R$ 0,00</div>
-                </div>
-            </div>
+    function formatarValor(valor) {
+      return parseFloat(valor).toLocaleString('pt-BR', {
+        style: 'currency', currency: 'BRL'
+      });
+    }
 
-            <!-- Cost Summary -->
-            <div class="cost-summary">
-                <h3>🧾 Resumo dos Custos</h3>
-                <div class="cost-item">
-                    <span class="cost-label">Lance:</span>
-                    <span class="cost-value" id="bidDisplay">R$ 0,00</span>
-                </div>
-                <div class="cost-item">
-                    <span class="cost-label">Comissão Leiloeiro:</span>
-                    <span class="cost-value" id="auctioneerFee">R$ 0,00</span>
-                </div>
-                <div class="cost-item">
-                    <span class="cost-label">Transferência:</span>
-                    <span class="cost-value" id="transferDisplay">R$ 0,00</span>
-                </div>
-                <div class="cost-item">
-                    <span class="cost-label">Frete:</span>
-                    <span class="cost-value" id="freightDisplay">R$ 0,00</span>
-                </div>
-                <div class="cost-item">
-                    <span class="cost-label">Lavagem:</span>
-                    <span class="cost-value" id="washingDisplay">R$ 0,00</span>
-                </div>
-                <div class="cost-item">
-                    <span class="cost-label">Manutenção:</span>
-                    <span class="cost-value" id="maintenanceDisplay">R$ 0,00</span>
-                </div>
-                <div class="cost-item">
-                    <span class="cost-label">Comissão Vendedor:</span>
-                    <span class="cost-value" id="sellerFee">R$ 0,00</span>
-                </div>
-                <div class="cost-item cost-total">
-                    <span class="cost-label">Total dos Custos:</span>
-                    <span class="cost-value" id="totalCosts">R$ 0,00</span>
-                </div>
-            </div>
+    function limparValor(str) {
+      return parseFloat(str.replace(/\./g, '').replace(',', '.')) || 0;
+    }
 
-            <!-- Profit Display -->
-            <div class="profit-display">
-                <div class="profit-title">🏆 Lucro Líquido</div>
-                <div class="profit-amount" id="netProfitAmount">R$ 0,00</div>
-                <div class="profit-percentage" id="netProfitPercentage">0,00% de margem de lucro</div>
-            </div>
-        </div>
+    function calcular() {
+      const fipe = limparValor(document.getElementById('fipe').value);
+      const lance = limparValor(document.getElementById('lance').value);
+      const comissao = limparValor(document.getElementById('comissao').value);
+      const transferencia = limparValor(document.getElementById('transferencia').value);
+      const frete = limparValor(document.getElementById('frete').value);
+      const lavagem = limparValor(document.getElementById('lavagem').value);
+      const manutencao = limparValor(document.getElementById('manutencao').value);
+      const comissao_vendedor = limparValor(document.getElementById('comissao_vendedor').value);
 
-        <!-- Error Display -->
-        <div id="error" class="card error hidden">
-            ⚠️ <span id="errorMessage">Erro nos dados inseridos. Verifique os valores e tente novamente.</span>
-        </div>
-    </div>
+      if (!fipe) return;
 
-    <script>
-        // Currency formatting
-        function formatCurrency(value) {
-            try {
-                return new Intl.NumberFormat('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL'
-                }).format(value);
-            } catch (e) {
-                return 'R$ 0,00';
-            }
-        }
+      const fipe50 = fipe * 0.50;
+      const fipe70 = fipe * 0.70;
+      const fipe80 = fipe * 0.80;
+      const fipe90 = fipe * 0.90;
 
-        function parseCurrency(value) {
-            if (!value) return 0;
-            return parseFloat(value.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
-        }
+      const totalLance = lance + (lance * (comissao / 100));
+      const precoVenda = fipe80;
+      const comissaoVendR$ = precoVenda * (comissao_vendedor / 100);
+      const totalCustos = totalLance + transferencia + frete + lavagem + manutencao + comissaoVendR$;
 
-        function parsePercentage(value) {
-            if (!value) return 0;
-            return parseFloat(value.replace(',', '.')) || 0;
-        }
+      const lucro = precoVenda - totalCustos;
+      const lucroPercent = (lucro / precoVenda) * 100;
 
-        function formatCurrencyInput(value) {
-            let numericValue = value.replace(/[^\d]/g, '');
-            if (numericValue.length > 0) {
-                let formatted = (parseInt(numericValue) / 100).toFixed(2);
-                formatted = formatted.replace('.', ',');
-                formatted = formatted.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                return formatted;
-            }
-            return '';
-        }
+      const resultados = document.getElementById('resultados');
+      resultados.innerHTML = `
+        <div class="result-item">50% da FIPE: ${formatarValor(fipe50)}</div>
+        <div class="result-item">70% da FIPE: ${formatarValor(fipe70)}</div>
+        <div class="result-item">80% da FIPE: ${formatarValor(fipe80)}</div>
+        <div class="result-item">90% da FIPE: ${formatarValor(fipe90)}</div>
+        <hr>
+        <div class="result-item">Total do lance com comissão: ${formatarValor(totalLance)}</div>
+        <div class="result-item">Comissão do vendedor (R$): ${formatarValor(comissaoVendR$)}</div>
+        <div class="result-item">Total de custos: ${formatarValor(totalCustos)}</div>
+        <div class="result-item">Lucro líquido (R$): ${formatarValor(lucro)}</div>
+        <div class="result-item">Lucro líquido (%): ${lucroPercent.toFixed(2).replace('.', ',')}%</div>
+      `;
+    }
 
-        function formatPercentageInput(value) {
-            let cleaned = value.replace(/[^\d,]/g, '');
-            if (cleaned.includes(',')) {
-                const parts = cleaned.split(',');
-                cleaned = parts[0] + ',' + parts[1].substring(0, 2);
-            }
-            return cleaned;
-        }
-
-        // Add input formatting
-        document.querySelectorAll('.currency-input').forEach(input => {
-            input.addEventListener('input', function(e) {
-                this.value = formatCurrencyInput(this.value);
-            });
-        });
-
-        document.querySelectorAll('.percent-input').forEach(input => {
-            input.addEventListener('input', function(e) {
-                this.value = formatPercentageInput(this.value);
-            });
-        });
-
-        // Form submission
-        document.getElementById('calculatorForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            try {
-                // Get input values
-                const fipe = parseCurrency(document.getElementById('fipeValue').value);
-                const bid = parseCurrency(document.getElementById('bidAmount').value);
-                const auctioneerCommission = parsePercentage(document.getElementById('auctioneerCommission').value);
-                const transfer = parseCurrency(document.getElementById('transferFee').value);
-                const freight = parseCurrency(document.getElementById('freight').value);
-                const washing = parseCurrency(document.getElementById('washing').value);
-                const maintenance = parseCurrency(document.getElementById('maintenance').value);
-                const sellerCommission = parsePercentage(document.getElementById('sellerCommission').value);
-
-                if (fipe <= 0 || bid <= 0) {
-                    throw new Error('Valor FIPE e valor do lance são obrigatórios');
-                }
-
-                // Calculate FIPE percentages
-                const fipe50 = fipe * 0.5;
-                const fipe70 = fipe * 0.7;
-                const fipe80 = fipe * 0.8;
-                const fipe90 = fipe * 0.9;
-
-                // Calculate costs
-                const auctioneerFee = bid * (auctioneerCommission / 100);
-                const sellerFee = fipe80 * (sellerCommission / 100);
-                const totalCosts = bid + auctioneerFee + transfer + freight + washing + maintenance + sellerFee;
-
-                // Calculate profit
-                const netProfitAmount = fipe80 - totalCosts;
-                const netProfitPercentage = (netProfitAmount / fipe80) * 100;
-
-                // Display results
-                document.getElementById('fipe50').textContent = formatCurrency(fipe50);
-                document.getElementById('fipe70').textContent = formatCurrency(fipe70);
-                document.getElementById('fipe80').textContent = formatCurrency(fipe80);
-                document.getElementById('fipe90').textContent = formatCurrency(fipe90);
-
-                document.getElementById('bidDisplay').textContent = formatCurrency(bid);
-                document.getElementById('auctioneerFee').textContent = formatCurrency(auctioneerFee);
-                document.getElementById('transferDisplay').textContent = formatCurrency(transfer);
-                document.getElementById('freightDisplay').textContent = formatCurrency(freight);
-                document.getElementById('washingDisplay').textContent = formatCurrency(washing);
-                document.getElementById('maintenanceDisplay').textContent = formatCurrency(maintenance);
-                document.getElementById('sellerFee').textContent = formatCurrency(sellerFee);
-                document.getElementById('totalCosts').textContent = formatCurrency(totalCosts);
-
-                document.getElementById('netProfitAmount').textContent = formatCurrency(netProfitAmount);
-                document.getElementById('netProfitPercentage').textContent = netProfitPercentage.toFixed(2).replace('.', ',') + '% de margem de lucro';
-
-                // Show results, hide error
-                document.getElementById('results').classList.remove('hidden');
-                document.getElementById('error').classList.add('hidden');
-
-            } catch (error) {
-                // Show error, hide results
-                document.getElementById('error').classList.remove('hidden');
-                document.getElementById('results').classList.add('hidden');
-            }
-        });
-
-        // Enter key support
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    document.getElementById('calculatorForm').dispatchEvent(new Event('submit'));
-                }
-            });
-        });
-    </script>
+    inputs.forEach(input => {
+      input.addEventListener('input', calcular);
+    });
+  </script>
 </body>
 </html>
